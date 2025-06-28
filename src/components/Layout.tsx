@@ -1,9 +1,10 @@
 
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FileText, CreditCard, Users, BarChart3, Menu, X } from 'lucide-react';
+import { FileText, CreditCard, Users, BarChart3, Menu, X, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/useAuth';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: BarChart3 },
@@ -19,6 +20,7 @@ interface LayoutProps {
 export default function Layout({ children }: LayoutProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
@@ -57,6 +59,17 @@ export default function Layout({ children }: LayoutProps) {
               );
             })}
           </nav>
+          {/* Mobile user menu */}
+          <div className="absolute bottom-4 left-4 right-4">
+            <div className="p-4 bg-gray-50 rounded-lg">
+              <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+              <p className="text-xs text-gray-600">{user?.email}</p>
+              <Button variant="ghost" size="sm" onClick={signOut} className="mt-2 w-full">
+                <LogOut className="h-4 w-4 mr-2" />
+                Sign Out
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -92,6 +105,17 @@ export default function Layout({ children }: LayoutProps) {
                 })}
               </div>
             </nav>
+            {/* Desktop user menu */}
+            <div className="p-4 border-t">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <p className="text-sm font-medium text-gray-900">{user?.name}</p>
+                <p className="text-xs text-gray-600">{user?.email}</p>
+                <Button variant="ghost" size="sm" onClick={signOut} className="mt-2 w-full">
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Sign Out
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
